@@ -42,10 +42,9 @@ class TDAgent:
         """
         Selects an action using epsilon greedy
         Args:
-        tiles - np.array, an array of active tiles
+        state - dictionary that contains the board state and current turn's mark.
         Returns:
-        (chosen_action, action_value) - (int, float), tuple of the chosen action
-                                        and it's value
+        int between 0 and 6 denoting the column to play.
         """
 
         board = state['board']
@@ -83,13 +82,12 @@ class TDAgent:
         return action
 
     def agent_update(self, reward, state):
-        """The first method called when the experiment starts, called after
-        the environment starts.
+        """Updates the weights of the model based off of the observed reward and
+        the current state using the TD(lambda) update rule.
         Args:
-            state (Numpy array): the state observation from the
-                environment's evn_start function.
-        Returns:
-            The first action the agent takes.
+            reward -- Float of the observed reward for the test_board
+            state -- dictionary containing board configuration and current turn's
+            mark, accessed through keys: 'board' and 'mark'
         """
         board = state['board']
         columns = self.columns
@@ -107,13 +105,7 @@ class TDAgent:
 
     def last_agent_update(self, reward):
 
-        """The first method called when the experiment starts, called after
-        the environment starts.
-        Args:
-            state (Numpy array): the state observation from the
-                environment's evn_start function.
-        Returns:
-            The first action the agent takes.
+        """If the episode is terminal, then we chage the update rule
         """
 
         #update agent weights
