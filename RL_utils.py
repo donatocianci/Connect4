@@ -57,9 +57,6 @@ def coarse_code_board(board, mark, rows, cols):
     return X
 
 def train(num_episodes, players):
-    '''
-
-    '''
 
     win_record = []
 
@@ -91,9 +88,6 @@ def train(num_episodes, players):
     return win_record
 
 def evaluate(num_episodes, agents):
-    '''
-
-    '''
 
     win_record = []
 
@@ -117,6 +111,17 @@ def evaluate(num_episodes, agents):
             game.state['mark'] = 1 + game.state['mark']%2
 
     return win_record
+
+
+# Gets board at next step if agent drops piece in selected column
+def drop_piece(grid, col, mark, rows):
+    next_grid = grid.copy()
+    for row in range(rows-1, -1, -1):
+        if next_grid[row][col] == 0:
+            break
+    next_grid[row][col] = mark
+    return next_grid
+
 
 def generate_examples(num_episodes, agents,existing_database = set(), epsilon = 0.3):
 
@@ -145,11 +150,39 @@ def generate_examples(num_episodes, agents,existing_database = set(), epsilon = 
 
     return existing_database
 
+def check_winning_move(board, rows, columns, col, mark):
+    # Convert the board to a 2D grid
+    grid = np.asarray(board).reshape(rows, columns)
+    next_grid = drop_piece(grid, col, mark, rows)
+    # horizontal
+    for row in range(rows):
+        for col in range(columns-(4-1)):
+            window = list(next_grid[row,col:col+4])
+            if window.count(mark) == 4:
+                return True
+    # vertical
+    for row in range(rows-(4-1)):
+        for col in range(columns):
+            window = list(next_grid[row:row+4,col])
+            if window.count(mark) == 4:
+                return True
+    # positive diagonal
+    for row in range(rows-(4-1)):
+        for col in range(columns-(4-1)):
+            window = list(next_grid[range(row, row+4), range(col, col+4)])
+            if window.count(mark) == 4:
+                return True
+    # negative diagonal
+    for row in range(4-1, rows):
+        for col in range(columns-(rows-1)):
+            window = list(next_grid[range(row, row-4, -1), range(col, col+4)])
+            if window.count(mark) == 4:
+                return True
+    return False
+
+
 
 def watch_play(agents):
-    '''
-
-    '''
 
     first_play = choice([1,2])
     game = ConnectX()

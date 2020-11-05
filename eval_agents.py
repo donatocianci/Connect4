@@ -1,4 +1,5 @@
 from random import choice
+from RL_utils import check_winning_move
 
 class BaseAgent:
 
@@ -37,9 +38,33 @@ class BaseAgent:
     def agent_start_episode(self):
         pass
 
+
+class McGoo(BaseAgent):
+
+    def select_action(self, state):
+
+        board = state['board']
+        columns = self.columns
+        rows = self.rows
+        mark = state['mark']
+
+        valid_moves = [col for col in range(columns) if board[col] == 0]
+        winning_moves = [col for col in valid_moves if check_winning_move(board, rows, columns, col, mark) == True]
+        if winning_moves:
+            return choice(winning_moves)
+        op_winning_moves = [col for col in valid_moves if
+                             check_winning_move(board, rows, columns, col, mark%2+1) == True]
+        if op_winning_moves:
+            return choice(op_winning_moves)
+        return choice(valid_moves)
+
+
+
+
+
 class StepPlay(BaseAgent):
     """
-    Agent used for playing against a particular agent. 
+    Agent used for playing against a particular agent.
     """
 
     def select_action(self, state):
