@@ -1,0 +1,14 @@
+name: connectX
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.7.13
+  - torchvision=0.4.0
+  - pytorch=1.2.0
+  - notebook=6.4.11
+  - h5py=3.6.0
+  - matplotlib=3.5.1
+- pip:
+    - kaggle-environments==1.9.10
+prefix: /opt/anaconda3/envs/connectX
