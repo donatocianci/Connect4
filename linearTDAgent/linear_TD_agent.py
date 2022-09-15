@@ -4,8 +4,7 @@ from RL_utils import argmax, coarse_code_board
 #linear TD(lambda) Agent
 class TDAgent:
     """
-    Initialization of TD(lambda) Agent. All values are set to None so they can
-    be initialized in the agent_init method.
+    Implementation of a linear TD(lambda) Agent. 
     """
     def __init__(self, agent_info = {}):
         """Setup for the agent called when the experiment first starts."""
@@ -13,16 +12,16 @@ class TDAgent:
         self.gamma = agent_info.get("gamma", 0.5)
         self.alpha = agent_info.get("alpha", 0.01)
         self.epsilon = agent_info.get("epsilon", 0.0)
-        self.columns = agent_info.get("columns", 7)
-        self.rows = agent_info.get("rows", 6)
+        self.columns = agent_info.get("columns", 4)
+        self.rows = agent_info.get("rows", 4)
         self.inarow = agent_info.get("inarow", 4)
-        num_features = 2 * (self.columns + self.rows + 2 * (self.rows + self.columns - 1))
+        num_features = 150
         self.w = agent_info.get("w", np.random.normal( 50.0,25.0, size = num_features ) )
         self.z = np.zeros(num_features)
         self.delta = 0.1
 
     def agent_start_episode(self):
-        num_features = 2 * (self.columns + self.rows + 2 * (self.rows + self.columns - 1))
+        num_features = 150
         self.z = np.zeros(num_features)
 
     def select_action(self, state):
